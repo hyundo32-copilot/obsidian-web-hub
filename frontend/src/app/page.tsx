@@ -7,11 +7,13 @@ import NoteDetailPanel from "@/components/NoteDetail";
 import SynthesisCard from "@/components/SynthesisCard";
 import ThemeToggle from "@/components/ThemeToggle";
 import HomepageModal from "@/components/HomepageModal";
+import GraphView from "@/components/GraphView";
 import { queryVault, getNote, NoteDetail, QueryResponse } from "@/lib/api";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Network } from "lucide-react";
 
 export default function Home() {
   const [showHomepage, setShowHomepage] = useState(false);
+  const [showGraph, setShowGraph] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
@@ -61,6 +63,13 @@ export default function Home() {
           <h1 className="font-bold text-slate-800 dark:text-slate-100 text-base sm:text-lg flex-1">
             hyundo32의 LLM 지식 허브
           </h1>
+          <button
+            onClick={() => setShowGraph(true)}
+            aria-label="그래프 뷰"
+            className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 active:scale-95 transition-all"
+          >
+            <Network size={18} />
+          </button>
           <ThemeToggle />
         </div>
       </header>
@@ -129,6 +138,17 @@ export default function Home() {
 
       {/* 시작 페이지 등록 모달 */}
       {showHomepage && <HomepageModal onClose={() => setShowHomepage(false)} />}
+
+      {/* 그래프 뷰 */}
+      {showGraph && (
+        <GraphView
+          onNodeClick={async (path) => {
+            setShowGraph(false);
+            await handleNoteClick(path);
+          }}
+          onClose={() => setShowGraph(false)}
+        />
+      )}
 
       {/* Note detail panel */}
       {selectedNote && (

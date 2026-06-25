@@ -80,6 +80,24 @@ export function ingestNote(
   });
 }
 
+export interface GraphNode {
+  id: string;
+  title: string;
+  folder: string;
+}
+export interface GraphEdge {
+  source: string;
+  target: string;
+}
+export interface GraphData {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+}
+
+export function getGraph(): Promise<GraphData> {
+  return apiFetch("/api/graph");
+}
+
 export function delegateToHermes(path: string): Promise<DelegateResponse> {
   return apiFetch("/api/ingest/delegate", {
     method: "POST",

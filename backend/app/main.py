@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routes import ingest, notes, query, share
+from app.routes import graph, ingest, notes, query, share
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,6 +26,7 @@ app.include_router(query.router, prefix="/api", tags=["query"])
 app.include_router(notes.router, prefix="/api", tags=["notes"])
 app.include_router(ingest.router, prefix="/api", tags=["ingest"])
 app.include_router(share.router, prefix="/api", tags=["share"])
+app.include_router(graph.router, prefix="/api", tags=["graph"])
 
 
 @app.get("/health")
