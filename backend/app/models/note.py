@@ -14,7 +14,6 @@ class IngestRequest(BaseModel):
     content: str = Field(..., min_length=1)
     source_query_id: Optional[str] = None
     tags: List[str] = Field(default_factory=list)
-    delegate: bool = Field(default=False)
 
     @validator("target_path")
     def no_path_traversal(cls, v):
@@ -26,7 +25,6 @@ class IngestRequest(BaseModel):
 class IngestResponse(BaseModel):
     status: str
     path: str
-    hermes_result: Optional[str] = None
 
 
 class ShareRequest(BaseModel):

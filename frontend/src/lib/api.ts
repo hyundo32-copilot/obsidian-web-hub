@@ -46,6 +46,9 @@ export interface NoteDetail {
 export interface IngestResponse {
   status: string;
   path: string;
+}
+
+export interface DelegateResponse {
   hermes_result?: string | null;
 }
 
@@ -65,7 +68,6 @@ export function ingestNote(
   content: string,
   tags: string[],
   sourceQueryId?: string,
-  delegate = false,
 ): Promise<IngestResponse> {
   return apiFetch("/api/ingest", {
     method: "POST",
@@ -74,7 +76,13 @@ export function ingestNote(
       content,
       tags,
       source_query_id: sourceQueryId,
-      delegate,
     }),
+  });
+}
+
+export function delegateToHermes(path: string): Promise<DelegateResponse> {
+  return apiFetch("/api/ingest/delegate", {
+    method: "POST",
+    body: JSON.stringify({ path }),
   });
 }

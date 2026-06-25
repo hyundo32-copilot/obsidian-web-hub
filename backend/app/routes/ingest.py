@@ -1,4 +1,7 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 
 from app.auth import require_auth
 from app.config import settings
@@ -25,9 +28,18 @@ async def ingest_note(req: IngestRequest, _: str = Depends(require_auth)):
         raise HTTPException(status_code=500, detail=f"저장 실패: {e}")
 
     safe_path = req.target_path.lstrip("/")
+    return IngestResponse(status=status, path=safe_path)
 
-    hermes_result = None
-    if req.delegate:
-        hermes_result = await delegate_ingest_to_hermes(safe_path)
 
-    return IngestResponse(status=status, path=safe_path, hermes_result=hermes_result)
+class DelegateRequest(BaseModel):
+    path: str
+
+
+class DelegateResponse(BaseModel):
+    hermes_result: Optional[str] = None
+
+
+@router.post("/ingest/delegate", response_model=DelegateResponse)
+async def delegate_ingest(req: DelegateRequest, _: str = Depends(require_auth)):
+    hermes_result = await delegate_ingest_to_hermes(req.path)
+    return DelegateResponse(hermes_result=hermes_result)
