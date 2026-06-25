@@ -18,10 +18,10 @@ export default function IngestButton({ queryId, query, content }: Props) {
     setState("loading");
     const today = new Date().toISOString().slice(0, 10);
     const slug = query.slice(0, 30).replace(/\s+/g, "-").replace(/[^\w가-힣-]/g, "");
-    const targetPath = `wiki/raw/${today}_${slug}`;
+    const targetPath = `raw/inbox/${today}_${slug}`;
     const noteContent = `# ${query}\n\n${content}`;
     try {
-      await ingestNote(targetPath, noteContent, ["raw", "from-web"], queryId, true);
+      await ingestNote(targetPath, noteContent, ["inbox", "from-web"], queryId, true);
       setState("done");
       setTimeout(() => setState("idle"), 3000);
     } catch {

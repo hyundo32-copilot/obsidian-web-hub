@@ -19,10 +19,10 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
     setHermesResult(null);
     const today = new Date().toISOString().slice(0, 10);
     const slug = query.slice(0, 40).replace(/\s+/g, "-").replace(/[^\w가-힣-]/g, "");
-    const targetPath = `wiki/raw/${today}_ai-summary_${slug}`;
+    const targetPath = `raw/inbox/${today}_ai-summary_${slug}`;
     const content = `# ${query}\n\n> AI 요약 (obsidian-wiki-query)\n\n${synthesis}`;
     try {
-      const res = await ingestNote(targetPath, content, ["ai-summary", "raw"], queryId, true);
+      const res = await ingestNote(targetPath, content, ["ai-summary", "inbox"], queryId, true);
       setHermesResult(res.hermes_result ?? null);
       setStatus("done");
     } catch {
