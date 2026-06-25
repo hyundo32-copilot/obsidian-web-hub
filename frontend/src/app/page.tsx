@@ -118,8 +118,6 @@ export default function Home() {
       {selectedNote && (
         <NoteDetailPanel
           note={selectedNote}
-          queryId={queryResult?.query_id ?? ""}
-          query={lastQuery}
           onClose={() => setSelectedNote(null)}
         />
       )}

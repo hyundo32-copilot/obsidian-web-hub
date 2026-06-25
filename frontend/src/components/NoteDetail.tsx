@@ -4,17 +4,14 @@ import { NoteDetail } from "@/lib/api";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import ShareButtons from "./ShareButtons";
-import IngestButton from "./IngestButton";
 import { X } from "lucide-react";
 
 interface Props {
   note: NoteDetail;
-  queryId: string;
-  query: string;
   onClose: () => void;
 }
 
-export default function NoteDetailPanel({ note, queryId, query, onClose }: Props) {
+export default function NoteDetailPanel({ note, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-40 flex items-start justify-end bg-black/30">
       <div className="h-full w-full max-w-2xl overflow-y-auto bg-white shadow-xl flex flex-col">
@@ -33,8 +30,10 @@ export default function NoteDetailPanel({ note, queryId, query, onClose }: Props
 
         {/* Actions */}
         <div className="flex gap-2 px-6 py-3 border-b border-slate-100">
-          <IngestButton queryId={queryId} query={query} content={note.content} />
-          <ShareButtons content={note.content} />
+          <ShareButtons
+            title={String(note.frontmatter.title ?? note.path.split("/").pop())}
+            content={note.content}
+          />
         </div>
 
         {/* Backlinks */}
