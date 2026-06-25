@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 interface Props {
   title: string;
   content: string;
+  onClose?: () => void;
 }
 
-export default function ShareButtons({ title, content }: Props) {
+export default function ShareButtons({ title, content, onClose }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [copied, setCopied] = useState(false);
   const [sharePressed, setSharePressed] = useState(false);
@@ -95,6 +96,16 @@ export default function ShareButtons({ title, content }: Props) {
           {copied ? <Check size={15} /> : <Clipboard size={15} />}
           {copied ? "복사됨!" : "복사"}
         </button>
+
+        {/* 닫기 버튼 */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 active:scale-95 active:bg-slate-100 transition-all duration-150 select-none"
+          >
+            <X size={15} /> 닫기
+          </button>
+        )}
       </div>
 
       {/* 공유 모달 */}

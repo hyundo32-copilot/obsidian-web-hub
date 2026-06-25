@@ -44,20 +44,20 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-50">
       {/* Header */}
-      <header className="border-b border-slate-200 bg-white px-6 py-4">
+      <header className="border-b border-slate-200 bg-white px-4 sm:px-6 py-3 sm:py-4 sticky top-0 z-30">
         <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <BookOpen className="text-slate-600" size={22} />
-          <h1 className="font-bold text-slate-800 text-lg">옵시디언 웹 허브</h1>
+          <BookOpen className="text-slate-600 shrink-0" size={20} />
+          <h1 className="font-bold text-slate-800 text-base sm:text-lg">hyundo32의 옵시디언 웹 허브</h1>
         </div>
       </header>
 
       {/* Main */}
-      <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-10">
+      <main className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-10">
         {/* Search */}
-        <div className="flex flex-col items-center gap-6 mb-10">
-          <p className="text-slate-500 text-sm">볼트에서 지식을 검색하고 저장하세요</p>
+        <div className="flex flex-col items-center gap-4 sm:gap-6 mb-8 sm:mb-10">
+          <p className="text-slate-500 text-sm hidden sm:block">볼트에서 지식을 검색하고 저장하세요</p>
           <PromptInput onSearch={handleSearch} loading={loading} />
         </div>
 
@@ -85,11 +85,11 @@ export default function Home() {
               />
             )}
 
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-slate-700">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h2 className="text-sm font-semibold text-slate-700 truncate mr-2">
                 &ldquo;{lastQuery}&rdquo; 검색 결과
               </h2>
-              <span className="text-xs text-slate-400">{queryResult.results.length}건</span>
+              <span className="text-xs text-slate-400 shrink-0">{queryResult.results.length}건</span>
             </div>
 
             {queryResult.results.length === 0 ? (

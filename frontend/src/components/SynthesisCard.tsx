@@ -60,9 +60,9 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
   const isBusy = phase.name === "uploading" || phase.name === "delegating";
 
   return (
-    <div className="mb-6 rounded-xl border border-violet-200 bg-violet-50 p-4">
+    <div className="mb-6 rounded-xl border border-violet-200 bg-violet-50 p-3 sm:p-4">
       {/* Header */}
-      <div className="flex items-center justify-between gap-2 mb-2">
+      <div className="flex items-start sm:items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
           <Sparkles size={15} className="text-violet-500" />
           <span className="text-xs font-semibold text-violet-700 uppercase tracking-wide">

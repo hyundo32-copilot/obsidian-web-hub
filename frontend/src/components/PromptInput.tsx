@@ -26,9 +26,9 @@ export default function PromptInput({ onSearch, loading }: Props) {
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="볼트에서 검색할 내용을 입력하세요…"
+          placeholder="검색어를 입력하세요…"
           className={cn(
-            "flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm",
+            "flex-1 min-w-0 rounded-lg border border-slate-300 bg-white px-3 sm:px-4 py-3 text-sm sm:text-base",
             "focus:outline-none focus:ring-2 focus:ring-slate-500",
             "disabled:opacity-50"
           )}
@@ -38,15 +38,19 @@ export default function PromptInput({ onSearch, loading }: Props) {
           type="submit"
           disabled={loading || !value.trim()}
           className={cn(
-            "flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-medium text-white",
-            "disabled:opacity-40 transition-colors",
+            "shrink-0 flex items-center gap-1.5 sm:gap-2 rounded-lg px-3 sm:px-5 py-3 text-sm font-medium text-white",
+            "disabled:opacity-40 transition-colors active:scale-95",
             llmMode ? "bg-violet-600 hover:bg-violet-500" : "bg-slate-800 hover:bg-slate-700"
           )}
         >
           {llmMode ? <Sparkles size={16} /> : <Search size={16} />}
-          {loading ? "처리 중…" : llmMode ? "AI 요약" : "검색"}
+          <span className="hidden sm:inline">
+            {loading ? "처리 중…" : llmMode ? "AI 요약" : "검색"}
+          </span>
         </button>
       </form>
+
+      {/* AI 모드 토글 */}
       <div className="flex items-center gap-2 self-end">
         <span className="text-xs text-slate-500">AI 요약 모드</span>
         <button

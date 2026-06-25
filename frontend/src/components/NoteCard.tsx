@@ -15,7 +15,9 @@ export default function NoteCard({ note, onClick }: Props) {
       onClick={() => onClick(note.path)}
       className={cn(
         "w-full text-left rounded-xl border border-slate-200 bg-white p-4",
-        "hover:border-slate-400 hover:shadow-sm transition-all"
+        "hover:border-slate-400 hover:shadow-sm",
+        "active:scale-[0.98] active:bg-slate-50",
+        "transition-all duration-150"
       )}
     >
       <div className="flex items-start justify-between gap-2">
@@ -26,7 +28,9 @@ export default function NoteCard({ note, onClick }: Props) {
           {(note.score * 100).toFixed(0)}%
         </span>
       </div>
-      <p className="mt-1 text-xs text-slate-500 line-clamp-2">{note.snippet}</p>
+      <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed">
+        {note.snippet}
+      </p>
       {note.tags.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
           {note.tags.map((tag) => (
