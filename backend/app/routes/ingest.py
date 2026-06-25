@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.auth import require_auth
 from app.config import settings
 from app.models.note import IngestRequest, IngestResponse
+from app.services.hermes_ingest_service import delegate_ingest_to_hermes
 from app.services.vault_writer import VaultWriter
 
 router = APIRouter()
@@ -24,4 +25,9 @@ async def ingest_note(req: IngestRequest, _: str = Depends(require_auth)):
         raise HTTPException(status_code=500, detail=f"저장 실패: {e}")
 
     safe_path = req.target_path.lstrip("/")
-    return IngestResponse(status=status, path=safe_path)
+
+    hermes_result = None
+    if req.delegate:
+        hermes_result = await delegate_ingest_to_hermes(safe_path)
+
+    return IngestResponse(status=status, path=safe_path, hermes_result=hermes_result)

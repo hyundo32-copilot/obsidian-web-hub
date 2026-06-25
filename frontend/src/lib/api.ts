@@ -46,6 +46,7 @@ export interface NoteDetail {
 export interface IngestResponse {
   status: string;
   path: string;
+  hermes_result?: string | null;
 }
 
 export function queryVault(query: string, limit = 10, mode = "wikisearch"): Promise<QueryResponse> {
@@ -63,10 +64,17 @@ export function ingestNote(
   targetPath: string,
   content: string,
   tags: string[],
-  sourceQueryId?: string
+  sourceQueryId?: string,
+  delegate = false,
 ): Promise<IngestResponse> {
   return apiFetch("/api/ingest", {
     method: "POST",
-    body: JSON.stringify({ target_path: targetPath, content, tags, source_query_id: sourceQueryId }),
+    body: JSON.stringify({
+      target_path: targetPath,
+      content,
+      tags,
+      source_query_id: sourceQueryId,
+      delegate,
+    }),
   });
 }
