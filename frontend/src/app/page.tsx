@@ -78,7 +78,11 @@ export default function Home() {
           <div>
             {/* AI Synthesis */}
             {queryResult.synthesis && (
-              <SynthesisCard synthesis={queryResult.synthesis} query={lastQuery} />
+              <SynthesisCard
+                synthesis={queryResult.synthesis}
+                query={lastQuery}
+                queryId={queryResult.query_id}
+              />
             )}
 
             <div className="flex items-center justify-between mb-4">
