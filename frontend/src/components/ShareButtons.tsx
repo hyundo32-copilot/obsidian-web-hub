@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Share2, Clipboard, Check, X, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -49,17 +49,12 @@ export default function ShareButtons({ title, content, onClose }: Props) {
     setShowModal(true);
   }
 
-  async function shareViaDevice() {
-    try {
-      await navigator.share({ title, text: plainText });
-      setShowModal(false);
-    } catch {
-      // 취소 시 무시
-    }
-  }
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+  }, []);
 
-  const canNativeShare =
-    typeof navigator !== "undefined" && typeof navigator.share === "function";
+  const kakaoUrl = `kakaotalk://send?text=${encodeURIComponent(`${title}\n\n${shortText}`)}`;
 
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
     `${title}\n\n${shortText}`
@@ -138,28 +133,31 @@ export default function ShareButtons({ title, content, onClose }: Props) {
 
             {/* 공유 옵션 */}
             <div className="p-3 space-y-1">
-              {canNativeShare && (
-                <button
-                  onClick={shareViaDevice}
+              {isMobile ? (
+                /* 모바일 → 카카오톡 URL 스킴 */
+                <a
+                  href={kakaoUrl}
+                  onClick={() => setShowModal(false)}
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-[0.98] transition-all"
                 >
-                  <span className="text-xl">📱</span>
-                  <span>카카오톡 / 기기 앱으로 공유</span>
-                </button>
+                  <span className="text-xl">💬</span>
+                  <span>카카오톡으로 공유</span>
+                </a>
+              ) : (
+                /* 데스크톱 → 트위터 */
+                <a
+                  href={twitterUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setShowModal(false)}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-[0.98] transition-all"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-slate-800 dark:text-slate-200">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                  <span>트위터 / X</span>
+                </a>
               )}
-
-              <a
-                href={twitterUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setShowModal(false)}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-[0.98] transition-all"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-slate-800 dark:text-slate-200">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-                <span>트위터 / X</span>
-              </a>
 
               <a
                 href={emailUrl}

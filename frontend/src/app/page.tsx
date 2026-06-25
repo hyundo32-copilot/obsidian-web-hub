@@ -6,10 +6,12 @@ import NoteCard from "@/components/NoteCard";
 import NoteDetailPanel from "@/components/NoteDetail";
 import SynthesisCard from "@/components/SynthesisCard";
 import ThemeToggle from "@/components/ThemeToggle";
+import HomepageModal from "@/components/HomepageModal";
 import { queryVault, getNote, NoteDetail, QueryResponse } from "@/lib/api";
 import { BookOpen } from "lucide-react";
 
 export default function Home() {
+  const [showHomepage, setShowHomepage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
@@ -49,9 +51,15 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 sm:px-6 py-3 sm:py-4 sticky top-0 z-30">
         <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <BookOpen className="text-slate-600 dark:text-slate-400 shrink-0" size={20} />
+          <button
+            onClick={() => setShowHomepage(true)}
+            aria-label="시작 페이지로 설정"
+            className="rounded-lg p-1 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition-all shrink-0"
+          >
+            <BookOpen size={20} />
+          </button>
           <h1 className="font-bold text-slate-800 dark:text-slate-100 text-base sm:text-lg flex-1">
-            hyundo32의 옵시디언 웹 허브
+            hyundo32의 LLM 지식 허브
           </h1>
           <ThemeToggle />
         </div>
@@ -62,7 +70,7 @@ export default function Home() {
         {/* Search */}
         <div className="flex flex-col items-center gap-4 sm:gap-6 mb-8 sm:mb-10">
           <p className="text-slate-500 dark:text-slate-400 text-sm hidden sm:block">
-            볼트에서 지식을 검색하고 저장하세요
+            볼트에서 지식을 검색하고 공유하세요
           </p>
           <PromptInput onSearch={handleSearch} loading={loading} />
         </div>
@@ -114,10 +122,13 @@ export default function Home() {
         {/* Empty state */}
         {!queryResult && !loading && !error && (
           <div className="text-center py-20 text-slate-300 dark:text-slate-600 text-sm select-none">
-            검색어를 입력하면 볼트에서 노트를 찾아드립니다
+            AI 요약 모드로 새로운 지식을 만들어드립니다
           </div>
         )}
       </main>
+
+      {/* 시작 페이지 등록 모달 */}
+      {showHomepage && <HomepageModal onClose={() => setShowHomepage(false)} />}
 
       {/* Note detail panel */}
       {selectedNote && (
