@@ -60,12 +60,12 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
   const isBusy = phase.name === "uploading" || phase.name === "delegating";
 
   return (
-    <div className="mb-6 rounded-xl border border-violet-200 bg-violet-50 p-3 sm:p-4">
+    <div className="mb-6 rounded-xl border border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-violet-900/20 p-3 sm:p-4">
       {/* Header */}
       <div className="flex items-start sm:items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
           <Sparkles size={15} className="text-violet-500" />
-          <span className="text-xs font-semibold text-violet-700 uppercase tracking-wide">
+          <span className="text-xs font-semibold text-violet-700 dark:text-violet-300 uppercase tracking-wide">
             AI 요약 — &ldquo;{query}&rdquo;
           </span>
         </div>
@@ -107,7 +107,7 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
 
       {/* 저장 전: 요약 내용 표시 */}
       {isIdle && (
-        <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{synthesis}</p>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{synthesis}</p>
       )}
 
       {/* 저장 중/후: 내용 초기화, 경로 표시 */}
@@ -116,9 +116,9 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
           {(phase.name === "uploaded" ||
             phase.name === "delegating" ||
             phase.name === "done") && (
-            <div className="flex items-center gap-2 rounded-lg bg-white border border-violet-100 px-3 py-2">
+            <div className="flex items-center gap-2 rounded-lg bg-white dark:bg-slate-800 border border-violet-100 dark:border-violet-800 px-3 py-2">
               <FileText size={13} className="text-violet-400 shrink-0" />
-              <code className="text-xs text-slate-600 break-all">
+              <code className="text-xs text-slate-600 dark:text-slate-300 break-all">
                 {(phase as { path: string }).path}.md
               </code>
             </div>
@@ -133,9 +133,9 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
           )}
 
           {phase.name === "done" && phase.hermesResult && (
-            <div className="rounded-lg border border-violet-100 bg-white p-3">
-              <p className="text-xs font-semibold text-violet-600 mb-1">Hermes 처리 결과</p>
-              <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">
+            <div className="rounded-lg border border-violet-100 dark:border-violet-800 bg-white dark:bg-slate-800 p-3">
+              <p className="text-xs font-semibold text-violet-600 dark:text-violet-400 mb-1">Hermes 처리 결과</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
                 {phase.hermesResult}
               </p>
             </div>
