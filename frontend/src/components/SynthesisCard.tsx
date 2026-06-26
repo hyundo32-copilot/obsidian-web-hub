@@ -12,6 +12,7 @@ interface Props {
 
 type Phase =
   | { name: "idle" }
+  | { name: "editing" }
   | { name: "uploading" }
   | { name: "uploaded"; path: string }
   | { name: "delegating"; path: string }
@@ -20,6 +21,12 @@ type Phase =
 
 export default function SynthesisCard({ synthesis, query, queryId }: Props) {
   const [phase, setPhase] = useState<Phase>({ name: "idle" });
+  const [editContent, setEditContent] = useState(synthesis);
+
+  function handleEditStart() {
+    setEditContent(synthesis);
+    setPhase({ name: "editing" });
+  }
 
   async function handleSave() {
     setPhase({ name: "uploading" });
@@ -27,7 +34,7 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
     const today = new Date().toISOString().slice(0, 10);
     const slug = query.slice(0, 40).replace(/\s+/g, "-").replace(/[^\w가-힣-]/g, "");
     const targetPath = `raw/inbox/${today}_ai-summary_${slug}`;
-    const content = `# ${query}\n\n> AI 요약 (obsidian-wiki-query)\n\n${synthesis}`;
+    const content = `# ${query}\n\n> AI 요약 (obsidian-wiki-query)\n\n${editContent}`;
 
     let uploadedPath: string;
     try {
@@ -57,6 +64,7 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
   }
 
   const isIdle = phase.name === "idle";
+  const isEditing = phase.name === "editing";
   const isBusy = phase.name === "uploading" || phase.name === "delegating";
 
   return (
@@ -72,11 +80,27 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
 
         {isIdle && (
           <button
-            onClick={handleSave}
+            onClick={handleEditStart}
             className="flex items-center gap-1.5 rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500 transition-colors"
           >
             <BookmarkPlus size={13} /> Vault 저장
           </button>
+        )}
+        {isEditing && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPhase({ name: "idle" })}
+              className="rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+            >
+              취소
+            </button>
+            <button
+              onClick={handleSave}
+              className="flex items-center gap-1.5 rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500 transition-colors"
+            >
+              <BookmarkPlus size={13} /> 저장
+            </button>
+          </div>
         )}
         {phase.name === "uploading" && (
           <span className="flex items-center gap-1.5 text-xs text-violet-500">
@@ -108,6 +132,15 @@ export default function SynthesisCard({ synthesis, query, queryId }: Props) {
       {/* 저장 전: 요약 내용 표시 */}
       {isIdle && (
         <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{synthesis}</p>
+      )}
+
+      {/* 편집 모드: textarea */}
+      {isEditing && (
+        <textarea
+          value={editContent}
+          onChange={(e) => setEditContent(e.target.value)}
+          className="w-full min-h-[180px] rounded-lg border border-violet-300 dark:border-violet-700 bg-white dark:bg-slate-800 p-3 text-sm text-slate-700 dark:text-slate-300 leading-relaxed resize-y focus:outline-none focus:ring-2 focus:ring-violet-400"
+        />
       )}
 
       {/* 저장 중/후: 내용 초기화, 경로 표시 */}
