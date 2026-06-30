@@ -104,3 +104,16 @@ export function delegateToHermes(path: string): Promise<DelegateResponse> {
     body: JSON.stringify({ path }),
   });
 }
+
+export interface RawIngestResponse {
+  status: string;
+  path: string;
+  hermes_result?: string | null;
+}
+
+export function ingestRawClipboard(content: string, title?: string): Promise<RawIngestResponse> {
+  return apiFetch("/api/ingest/raw", {
+    method: "POST",
+    body: JSON.stringify({ content, title }),
+  });
+}

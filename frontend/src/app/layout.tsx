@@ -12,7 +12,7 @@ try {
       siteTitle = config.site_title;
     }
   }
-} catch (e) {
+} catch {
   // Config loading failed, fallback to default title
 }
 

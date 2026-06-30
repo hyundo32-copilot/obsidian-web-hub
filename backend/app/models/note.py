@@ -36,3 +36,8 @@ class ShareRequest(BaseModel):
 class ShareResponse(BaseModel):
     status: str
     url: Optional[str] = None
+
+
+class RawIngestRequest(BaseModel):
+    content: str
+    title: Optional[str] = None

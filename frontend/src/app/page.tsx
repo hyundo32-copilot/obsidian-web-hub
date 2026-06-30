@@ -8,13 +8,15 @@ import SynthesisCard from "@/components/SynthesisCard";
 import ThemeToggle from "@/components/ThemeToggle";
 import HomepageModal from "@/components/HomepageModal";
 import GraphView from "@/components/GraphView";
+import QuickPasteModal from "@/components/QuickPasteModal";
 import { queryVault, getNote, NoteDetail, QueryResponse } from "@/lib/api";
-import { BookOpen, Network } from "lucide-react";
+import { BookOpen, Network, ClipboardPaste } from "lucide-react";
 
 export default function Home() {
   const [siteTitle, setSiteTitle] = useState("옵시디언 웹 허브");
   const [showHomepage, setShowHomepage] = useState(false);
   const [showGraph, setShowGraph] = useState(false);
+  const [showPasteModal, setShowPasteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
@@ -81,6 +83,13 @@ export default function Home() {
             className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 active:scale-95 transition-all"
           >
             <Network size={18} />
+          </button>
+          <button
+            onClick={() => setShowPasteModal(true)}
+            aria-label="클립보드 수집"
+            className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 active:scale-95 transition-all"
+          >
+            <ClipboardPaste size={18} />
           </button>
           <ThemeToggle />
         </div>
@@ -169,6 +178,12 @@ export default function Home() {
           onClose={() => setSelectedNote(null)}
         />
       )}
+
+      {/* Quick Paste Modal */}
+      <QuickPasteModal
+        isOpen={showPasteModal}
+        onClose={() => setShowPasteModal(false)}
+      />
     </div>
   );
 }

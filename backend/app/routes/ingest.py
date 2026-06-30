@@ -1,3 +1,4 @@
+import time
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -5,7 +6,7 @@ from pydantic import BaseModel
 
 from app.auth import require_auth
 from app.config import settings
-from app.models.note import IngestRequest, IngestResponse
+from app.models.note import IngestRequest, IngestResponse, RawIngestRequest
 from app.services.hermes_ingest_service import delegate_ingest_to_hermes
 from app.services.vault_writer import VaultWriter
 
@@ -43,3 +44,29 @@ class DelegateResponse(BaseModel):
 async def delegate_ingest(req: DelegateRequest, _: str = Depends(require_auth)):
     hermes_result = await delegate_ingest_to_hermes(req.path)
     return DelegateResponse(hermes_result=hermes_result)
+
+
+@router.post("/ingest/raw")
+async def ingest_raw_clipboard(req: RawIngestRequest, _: str = Depends(require_auth)):
+    filename = req.title.strip() if req.title else f"clip_{int(time.time())}"
+    target_path = f"raw/incoming/{filename}"
+
+    try:
+        status = await writer.ingest(
+            target_path=target_path,
+            content=req.content,
+            tags=["clipboard", "raw"],
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"저장 실패: {e}")
+
+    try:
+        hermes_result = await delegate_ingest_to_hermes(target_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"에이전트 위임 실패: {e}")
+
+    return {
+        "status": status,
+        "path": target_path,
+        "hermes_result": hermes_result
+    }
