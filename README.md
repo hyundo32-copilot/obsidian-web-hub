@@ -33,7 +33,8 @@ obsidian-web-hub/
 │   ├── settings.json   # 활성 설정 (로컬 전용, git 무시)
 │   └── settings.example.json # 설정 템플릿
 ├── docs/               # 설계 문서 및 리소스
-├── setup.sh            # 자동 환경 구축 스크립트
+├── setup.sh            # macOS / Linux 자동 설정 스크립트
+├── setup.ps1           # Windows PowerShell 자동 설정 스크립트
 └── README.md           # 프로젝트 안내 문서
 ```
 
@@ -47,18 +48,26 @@ obsidian-web-hub/
 - **ripgrep** (`rg`) 설치 필수
   - macOS: `brew install ripgrep`
   - Ubuntu/Debian: `sudo apt install ripgrep`
+  - Windows: `choco install ripgrep` 또는 `scoop install ripgrep`
 
 ---
 
 ### 2. 간편 실행 환경 구축 (자동 설정)
 
-프로젝트 루트 디렉토리에서 자동 설정 스크립트를 실행하여 가상환경 생성, 환경 변수 자동 파싱 및 의존성 패키지 설치를 진행합니다.
+프로젝트 루트 디렉토리에서 OS에 맞는 자동 설정 스크립트를 실행하면 가상환경 생성, 환경 변수 자동 파싱 및 의존성 패키지 설치가 자동으로 완료됩니다.
 
+#### 🍏 macOS / Linux
 ```bash
-# 1. 자동 설정 스크립트 실행
 ./setup.sh
 ```
-> 스크립트가 실행되면 `config/settings.json` 파일이 없을 시 `settings.example.json`을 자동으로 복사해 생성합니다.
+> ** launchd 등록**: macOS의 경우 재부팅 시 자동 켜짐을 지원하기 위해 launchd 에이전트 등록(`--service` 옵션 지원) 여부를 물어봅니다.
+
+#### 🪟 Windows (PowerShell)
+파워쉘의 스크립트 실행 제한 정책을 임시로 우회한 뒤 실행해야 합니다.
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+.\setup.ps1
+```
 
 ---
 
@@ -77,7 +86,7 @@ obsidian-web-hub/
   "hermes_api_key": ""
 }
 ```
-* **수정 후 동기화**: 설정을 변경한 뒤에는 `./setup.sh`를 다시 한번 실행해 주시면 백엔드와 프론트엔드 환경 파일로 설정값이 즉시 동기화됩니다.
+* **수정 후 동기화**: 설정을 변경한 뒤에는 자동 설정 스크립트(`./setup.sh` 또는 `.\setup.ps1`)를 다시 실행해 주시면 백엔드와 프론트엔드 환경 파일로 설정값이 즉시 동기화됩니다.
 
 ---
 
@@ -86,13 +95,20 @@ obsidian-web-hub/
 자동 설정이 끝나면 터미널 2개를 열어 각각 백엔드와 프론트엔드 서버를 구동합니다.
 
 #### 4.1 백엔드 실행
-```bash
-cd backend
-source .venv/bin/activate
-uvicorn app.main:app --reload --port 8000
-```
+* **macOS / Linux**:
+  ```bash
+  cd backend
+  source .venv/bin/activate
+  uvicorn app.main:app --reload --port 8000
+  ```
+* **Windows (PowerShell)**:
+  ```powershell
+  cd backend
+  .\.venv\Scripts\Activate.ps1
+  uvicorn app.main:app --reload --port 8000
+  ```
 
-#### 4.2 프론트엔드 실행
+#### 4.2 프론트엔드 실행 (공통)
 ```bash
 cd frontend
 npm run dev
