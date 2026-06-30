@@ -1,0 +1,9 @@
+{
+  "vault_path": "/path/to/your/obsidian/vault",
+  "site_title": "옵시디언 볼트 웹 허브",
+  "allowed_origins": "http://localhost:3000",
+  "basic_auth_user": "admin",
+  "basic_auth_pass": "changeme",
+  "hermes_api_url": "http://localhost:8642",
+  "hermes_api_key": ""
+}

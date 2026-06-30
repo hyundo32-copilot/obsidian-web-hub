@@ -28,14 +28,12 @@
 ```text
 obsidian-web-hub/
 ├── backend/            # FastAPI 백엔드
-│   ├── app/            # API 라우터, 서비스, 모델 정의
-│   ├── requirements.txt
-│   └── Dockerfile
 ├── frontend/           # Next.js 프론트엔드
-│   ├── src/            # 컴포넌트 및 페이지 뷰
-│   └── package.json
+├── config/             # 통합 설정 파일 관리 폴더
+│   ├── settings.json   # 활성 설정 (로컬 전용, git 무시)
+│   └── settings.example.json # 설정 템플릿
 ├── docs/               # 설계 문서 및 리소스
-├── docker-compose.yml  # 운영용 도커 컴포즈 설정
+├── setup.sh            # 자동 환경 구축 스크립트
 └── README.md           # 프로젝트 안내 문서
 ```
 
@@ -52,42 +50,54 @@ obsidian-web-hub/
 
 ---
 
-### 2. 로컬 개발 환경 실행
+### 2. 간편 실행 환경 구축 (자동 설정)
 
-#### 2.1 백엔드 실행
-1. `backend` 폴더로 이동하여 가상환경을 생성하고 의존성을 설치합니다.
-   ```bash
-   cd backend
-   python -m venv .venv
-   source .venv/bin/activate  # Windows: .venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-2. 환경 변수 파일 `.env`를 설정합니다. (`.env.example` 복사 후 편집)
-   ```bash
-   cp .env.example .env
-   ```
-   - `OBSIDIAN_VAULT_PATH`: 옵시디언 볼트 로컬 절대 경로를 입력합니다.
-   - `BASIC_AUTH_USER` / `BASIC_AUTH_PASS`: API 접근 인증을 위한 ID/PW를 변경합니다.
-3. 백엔드 서버를 구동합니다. (기본 포트: 8000)
-   ```bash
-   uvicorn app.main:app --reload --port 8000
-   ```
+프로젝트 루트 디렉토리에서 자동 설정 스크립트를 실행하여 가상환경 생성, 환경 변수 자동 파싱 및 의존성 패키지 설치를 진행합니다.
 
-#### 2.2 프론트엔드 실행
-1. `frontend` 폴더로 이동하여 의존성 패키지를 설치합니다.
-   ```bash
-   cd frontend
-   npm install
-   ```
-2. 환경 변수 파일 `.env.local`을 설정합니다. (`.env.example` 복사 후 편집)
-   ```bash
-   cp .env.example .env.local
-   ```
-   - 백엔드 주소 및 인증 정보를 설정합니다.
-3. 개발용 프론트엔드 서버를 구동합니다. (기본 포트: 3000)
-   ```bash
-   npm run dev
-   ```
+```bash
+# 1. 자동 설정 스크립트 실행
+./setup.sh
+```
+> 스크립트가 실행되면 `config/settings.json` 파일이 없을 시 `settings.example.json`을 자동으로 복사해 생성합니다.
+
+---
+
+### 3. 세부 설정 편집 (`config/settings.json`)
+
+생성된 `config/settings.json` 파일을 열어 본인 환경에 맞춰 설정값을 편집합니다. (이 파일은 `.gitignore`에 등록되어 있어 외부 저장소에 공유되지 않습니다.)
+
+```json
+{
+  "vault_path": "/Users/사용자/옵시디언/볼트경로",
+  "site_title": "나만의 LLM 지식 허브",
+  "allowed_origins": "http://localhost:3000",
+  "basic_auth_user": "admin",
+  "basic_auth_pass": "비밀번호설정",
+  "hermes_api_url": "http://localhost:8642",
+  "hermes_api_key": ""
+}
+```
+* **수정 후 동기화**: 설정을 변경한 뒤에는 `./setup.sh`를 다시 한번 실행해 주시면 백엔드와 프론트엔드 환경 파일로 설정값이 즉시 동기화됩니다.
+
+---
+
+### 4. 서버 실행하기
+
+자동 설정이 끝나면 터미널 2개를 열어 각각 백엔드와 프론트엔드 서버를 구동합니다.
+
+#### 4.1 백엔드 실행
+```bash
+cd backend
+source .venv/bin/activate
+uvicorn app.main:app --reload --port 8000
+```
+
+#### 4.2 프론트엔드 실행
+```bash
+cd frontend
+npm run dev
+```
+구동이 완료되면 브라우저에서 `http://localhost:3000`으로 접속해 사용할 수 있습니다.
 
 ---
 

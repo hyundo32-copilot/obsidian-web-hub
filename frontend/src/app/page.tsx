@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PromptInput from "@/components/PromptInput";
 import NoteCard from "@/components/NoteCard";
 import NoteDetailPanel from "@/components/NoteDetail";
@@ -12,6 +12,7 @@ import { queryVault, getNote, NoteDetail, QueryResponse } from "@/lib/api";
 import { BookOpen, Network } from "lucide-react";
 
 export default function Home() {
+  const [siteTitle, setSiteTitle] = useState("옵시디언 웹 허브");
   const [showHomepage, setShowHomepage] = useState(false);
   const [showGraph, setShowGraph] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,6 +21,17 @@ export default function Home() {
   const [lastQuery, setLastQuery] = useState("");
   const [selectedNote, setSelectedNote] = useState<NoteDetail | null>(null);
   const [noteLoading, setNoteLoading] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/config")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.site_title) {
+          setSiteTitle(data.site_title);
+        }
+      })
+      .catch((err) => console.error("Failed to fetch site config:", err));
+  }, []);
 
   async function handleSearch(query: string, mode: string) {
     setLoading(true);
@@ -61,7 +73,7 @@ export default function Home() {
             <BookOpen size={20} />
           </button>
           <h1 className="font-bold text-slate-800 dark:text-slate-100 text-base sm:text-lg flex-1">
-            hyundo32의 LLM 지식 허브
+            {siteTitle}
           </h1>
           <button
             onClick={() => setShowGraph(true)}
