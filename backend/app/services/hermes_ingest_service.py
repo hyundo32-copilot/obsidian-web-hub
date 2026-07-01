@@ -14,8 +14,9 @@ async def delegate_ingest_to_hermes(vault_rel_path: str) -> Optional[str]:
 
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {settings.hermes_api_key}",
     }
+    if settings.hermes_api_key:
+        headers["Authorization"] = f"Bearer {settings.hermes_api_key}"
     body = {
         "model": "default",
         "messages": [{"role": "user", "content": prompt}],
