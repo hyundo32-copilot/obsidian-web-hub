@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const API_BASE = "";
 const API_USER = process.env.NEXT_PUBLIC_API_USER ?? "admin";
 const API_PASS = process.env.NEXT_PUBLIC_API_PASS ?? "changeme";
 
