@@ -83,6 +83,7 @@ export default function GraphView({ onNodeClick, onClose }: Props) {
     const q     = searchRef.current.toLowerCase();
     const nodes = nodesRef.current;
     const links = linksRef.current;
+    const isDark = document.documentElement.classList.contains("dark");
 
     // 연결 노드 집합 (호버 시 하이라이트용)
     const adjSet = new Set<string>();
@@ -104,7 +105,7 @@ export default function GraphView({ onNodeClick, onClose }: Props) {
       const sx = s.x ?? 0, sy = s.y ?? 0, ex = t.x ?? 0, ey = t.y ?? 0;
       const adj = !hov || adjSet.has(s.id);
       ctx.globalAlpha = hov ? (adj ? 0.8 : 0.05) : 0.4;
-      ctx.strokeStyle = "#aaaaaa";
+      ctx.strokeStyle = isDark ? "#475569" : "#cbd5e1";
       ctx.lineWidth = 1.2;
       ctx.beginPath();
       ctx.moveTo(sx, sy);
@@ -156,10 +157,10 @@ export default function GraphView({ onNodeClick, onClose }: Props) {
         ctx.textAlign   = "center";
         ctx.globalAlpha = 1;
         const lx = nx, ly = ny - r - 4;
-        ctx.strokeStyle = "#0a0f1a";
+        ctx.strokeStyle = isDark ? "#0a0f1a" : "#ffffff";
         ctx.lineWidth   = 3 / k;
         ctx.strokeText(n.title.slice(0, 26), lx, ly);
-        ctx.fillStyle   = "#e8edf5";
+        ctx.fillStyle   = isDark ? "#e8edf5" : "#1e293b";
         ctx.fillText(n.title.slice(0, 26), lx, ly);
       }
     }
@@ -378,17 +379,16 @@ export default function GraphView({ onNodeClick, onClose }: Props) {
 
   // ── 렌더 ─────────────────────────────────────────────────────────────────
   return (
-    <div className="fixed inset-0 z-40 flex flex-col" style={{ background: "#0a0f1a" }}>
+    <div className="fixed inset-0 z-40 flex flex-col bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       {/* 헤더 */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700 shrink-0"
-           style={{ background: "rgba(17,24,39,0.9)", backdropFilter: "blur(12px)" }}>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800 shrink-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md">
         <div className="flex items-center gap-3 min-w-0">
-          <span className="font-semibold text-slate-100 text-sm shrink-0">그래프 뷰</span>
+          <span className="font-semibold text-slate-800 dark:text-slate-100 text-sm shrink-0">그래프 뷰</span>
           {!loading && (
-            <span className="text-xs text-slate-400 shrink-0">{counts.n}개 노트 · {counts.e}개 링크</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">{counts.n}개 노트 · {counts.e}개 링크</span>
           )}
           {hovTitle && (
-            <span className="text-xs bg-slate-700 text-slate-200 rounded-full px-2.5 py-0.5 truncate max-w-[200px]">
+            <span className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full px-2.5 py-0.5 truncate max-w-[200px]">
               {hovTitle}
             </span>
           )}
@@ -402,16 +402,16 @@ export default function GraphView({ onNodeClick, onClose }: Props) {
             onChange={e => onSearchChange(e.target.value)}
             placeholder="노트 이름, 폴더 검색…"
             className="w-full pl-6 pr-3 py-1.5 rounded-lg text-xs outline-none
-                       bg-slate-800 border border-slate-600 text-slate-200
-                       focus:border-indigo-500 placeholder:text-slate-500"
+                       bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200
+                       focus:border-indigo-500 placeholder:text-slate-400 dark:placeholder:text-slate-500"
           />
         </div>
 
         <div className="flex items-center gap-1 shrink-0">
-          <button onClick={() => zoomBy(1.3)}  aria-label="확대"   className="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-700 transition-colors"><ZoomIn   size={16}/></button>
-          <button onClick={() => zoomBy(0.77)} aria-label="축소"   className="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-700 transition-colors"><ZoomOut  size={16}/></button>
-          <button onClick={resetView}          aria-label="초기화" className="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-700 transition-colors"><RotateCcw size={16}/></button>
-          <button onClick={onClose}            aria-label="닫기"   className="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-700 transition-colors"><X size={18}/></button>
+          <button onClick={() => zoomBy(1.3)}  aria-label="확대"   className="p-2 rounded-lg text-slate-500 hover:text-slate-850 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><ZoomIn   size={16}/></button>
+          <button onClick={() => zoomBy(0.77)} aria-label="축소"   className="p-2 rounded-lg text-slate-500 hover:text-slate-850 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><ZoomOut  size={16}/></button>
+          <button onClick={resetView}          aria-label="초기화" className="p-2 rounded-lg text-slate-500 hover:text-slate-850 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><RotateCcw size={16}/></button>
+          <button onClick={onClose}            aria-label="닫기"   className="p-2 rounded-lg text-slate-500 hover:text-slate-850 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><X size={18}/></button>
         </div>
       </div>
 
@@ -441,12 +441,11 @@ export default function GraphView({ onNodeClick, onClose }: Props) {
 
         {/* 필터 패널 */}
         {!loading && (
-          <div className="absolute top-4 left-4 rounded-xl text-xs z-10"
-               style={{ background: "rgba(17,24,39,0.92)", border: "1px solid #2a3a5c" }}>
-            <div className="px-4 py-2.5 font-bold text-slate-400 uppercase tracking-widest text-[10px] border-b border-slate-700">
+          <div className="absolute top-4 left-4 rounded-xl text-xs z-10 border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 shadow-md">
+            <div className="px-4 py-2.5 font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest text-[10px] border-b border-slate-100 dark:border-slate-800">
               필터
             </div>
-            <label className="flex items-center gap-2 px-4 py-2.5 cursor-pointer text-slate-300 hover:text-white">
+            <label className="flex items-center gap-2 px-4 py-2.5 cursor-pointer text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
               <input type="checkbox" checked={showOrphans}
                      onChange={e => setShowOrphans(e.target.checked)}
                      className="accent-indigo-500 w-3.5 h-3.5"/>
@@ -457,19 +456,18 @@ export default function GraphView({ onNodeClick, onClose }: Props) {
 
         {/* 범례 */}
         {!loading && folderMap.length > 0 && (
-          <div className="absolute bottom-4 left-4 rounded-xl p-3.5 text-xs z-10"
-               style={{ background: "rgba(17,24,39,0.92)", border: "1px solid #2a3a5c" }}>
-            <div className="uppercase tracking-widest text-[9px] text-slate-500 mb-2 font-bold">폴더</div>
+          <div className="absolute bottom-4 left-4 rounded-xl p-3.5 text-xs z-10 border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 shadow-md">
+            <div className="uppercase tracking-widest text-[9px] text-slate-400 dark:text-slate-500 mb-2 font-bold">폴더</div>
             <div className="flex flex-col gap-1.5">
               {folderMap.map(([folder, color]) => (
-                <div key={folder} className="flex items-center gap-2 text-slate-400">
+                <div key={folder} className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                   <span className="w-3 h-3 rounded-full shrink-0"
                         style={{ background: color + "33", border: `2px solid ${color}` }}/>
                   <span>{folder || "(root)"}</span>
                 </div>
               ))}
             </div>
-            <div className="mt-2 pt-2 border-t border-slate-700 text-[9px] text-slate-600">
+            <div className="mt-2 pt-2 border-t border-slate-150 dark:border-slate-800 text-[9px] text-slate-400 dark:text-slate-600">
               드래그 이동 · 스크롤 확대 · 클릭으로 노트 열기
             </div>
           </div>

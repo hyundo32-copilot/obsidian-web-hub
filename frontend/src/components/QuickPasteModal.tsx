@@ -53,40 +53,40 @@ export default function QuickPasteModal({ isOpen, onClose }: QuickPasteModalProp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity">
-      <div className="w-full max-w-lg bg-gray-900 border border-gray-800 rounded-xl shadow-2xl p-6 flex flex-col gap-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity">
+      <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-6 flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-bold text-white">클립보드 수집 (Quick Paste)</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">클립보드 수집 (Quick Paste)</h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-200 transition-colors">
             ✕
           </button>
         </div>
 
         {message && (
-          <div className={`p-3 rounded-lg text-sm ${message.isError ? "bg-red-500/20 text-red-300 border border-red-500/30" : "bg-green-500/20 text-green-300 border border-green-500/30"}`}>
+          <div className={`p-3 rounded-lg text-sm ${message.isError ? "bg-red-50 dark:bg-red-500/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-500/30" : "bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-500/30"}`}>
             {message.text}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-400">제목 (옵션)</label>
+            <label className="text-sm text-slate-500 dark:text-slate-400">제목 (옵션)</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="제목을 입력하지 않으면 자동으로 생성됩니다."
-              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-400 dark:placeholder:text-slate-500"
             />
           </div>
 
           <div className="flex flex-col gap-1">
             <div className="flex justify-between items-end">
-              <label className="text-sm text-gray-400">내용</label>
+              <label className="text-sm text-slate-500 dark:text-slate-400">내용</label>
               <button
                 type="button"
                 onClick={handlePasteFromClipboard}
-                className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                className="text-xs text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 flex items-center gap-1 font-medium"
               >
                 📋 클립보드에서 읽기
               </button>
@@ -96,7 +96,7 @@ export default function QuickPasteModal({ isOpen, onClose }: QuickPasteModalProp
               onChange={(e) => setContent(e.target.value)}
               placeholder="여기에 내용을 붙여넣으세요. (Cmd+V)"
               rows={8}
-              className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors resize-y"
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors resize-y placeholder:text-slate-400 dark:placeholder:text-slate-500"
               required
             />
           </div>
@@ -105,7 +105,7 @@ export default function QuickPasteModal({ isOpen, onClose }: QuickPasteModalProp
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+              className="px-4 py-2 rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               disabled={isLoading}
             >
               취소

@@ -83,10 +83,11 @@ export default function HomepageModal({ onClose }: Props) {
               </div>
               <button
                 onClick={copyToClipboard}
-                className="shrink-0 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all active:scale-95"
-                style={copied
-                  ? { borderColor: "#22c55e", background: "#f0fdf4", color: "#15803d" }
-                  : { borderColor: "#cbd5e1", background: "white", color: "#374151" }}
+                className={`shrink-0 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all active:scale-95 ${
+                  copied
+                    ? "border-green-500 bg-green-50 text-green-700 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30"
+                    : "border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600"
+                }`}
               >
                 {copied ? <Check size={14} /> : <Copy size={14} />}
                 {copied ? "복사됨" : "복사"}
